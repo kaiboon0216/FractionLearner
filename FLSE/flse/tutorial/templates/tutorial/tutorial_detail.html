@@ -1,0 +1,147 @@
+{% extends "tutorial/base.html" %}
+{% load static %}
+{% block content %}
+	<article class="media content-section" style = "border-radius: 25px; background-color: #d6eef8; left: 90% ">
+	  <img class="rounded-circle article-img" src="{{ tutorial.author.profile.image.url }}">
+	  <div class="media-body">
+	    <div class="article-metadata">
+	      <a class="mr-2" href="#">{{ tutorial.author.username }}</a>
+				<small class="text-muted">{{ tutorial.date_published|date:"F d, Y" }}</small>
+				{% if tutorial.author == user %}
+	      		<div>
+					<a class="btn btn-outline-warning btn-sm mt-1 mb-1" href="{% url 'tutorial-update' tutorial.pk %}"><img style="width:25px;height:25px;" src="{% static 'Image/edit.png' %}"/></a>
+					<a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'tutorial-delete' tutorial.pk%}"><img style="width:25px;height:25px;" src="{% static 'Image/trash.png' %}"></a>
+	      		</div>
+	      {% endif %}
+	    </div>
+	    <h2 class="article-title">{{ tutorial.title }}</h2>
+			{% if tutorial.image %}
+				<div>
+					<a href="{{ tutorial.image.url }}"><img style='width:50%;height: 50%;'src="{{ tutorial.image.url }}"></a>
+				</div>
+			{% endif %}
+			<p class="article-content">{{ tutorial.content }}</p>
+			<small>Likes : {{ tutorial.liked_by.count }}</small>
+			<div>
+			{% if user in tutorial.liked_by.all %}
+				<form method="post">
+					{% csrf_token %}
+					<a class="btn-mr-3" href="{% url 'vote_tutorial' tutorial.pk %}"><img style="width:20px;height:20px" src="{% static 'Image/dislikes.png' %}"> <small>Dislike</small></a>
+					<a style="padding-left:10px;" class="btn-mr-3" href="{% url 'comment' tutorial.pk%}"><img style="width:20px;height:20px"src="{% static 'Image/comment.png' %}">  <small>Ask a question</small></a>
+				</form>
+			{% else %}
+				<form method="post">
+					{% csrf_token %}
+					<a class="btn-mr-3" href="{% url 'vote_tutorial' tutorial.pk %}"><img style="width:20px;height:20px" src="{% static 'Image/likes.png' %}"> <small>Like</small></a>
+					<a style="padding-left:10px;" class="btn-mr-3" href="{% url 'comment' tutorial.pk%}"><img style="width:20px;height:20px"src="{% static 'Image/comment.png' %}">  <small>Ask a question</small></a>
+				</form>
+			{% endif %}
+			</div>
+			<hr>
+			{% for comment in tutorial.comments.all %}
+				{% if comment.r_token == False %}
+					<article class="media content-section" style = "border-radius: 25px; background-color: white; padding: 10px;">
+						<img  style="width:50px;height:50px" class="rounded-circle article-img" src="{{ comment.author.profile.image.url }}">
+						<div class="media-body">
+							<div class="article-metadata">
+								<a class="mr-2" href="#">{{ comment.author }}</a>
+								{% if comment.author == user %}
+									<a style="float: right;"class="btn btn-outline-warning btn-sm mt-1 mb-1" href="{% url 'comment-update' comment.pk %}"><img style="width:20px;height:20px;" src="{% static 'Image/edit.png' %}"/></a>
+									<a style="float: right;"class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'comment-delete' comment.pk %}"><img style="width:20px;height:20px;" src="{% static 'Image/trash.png' %}"/></a>
+								{% endif %}
+								<small>Likes :{{ comment.liked_by.count }}</small>
+								<p class="article-title"> {{ comment.comment }}</p>	
+								
+
+								{% if user in comment.liked_by.all %}
+								<form method="post">
+									{% csrf_token %}
+									<a class="btn-mr-3" href="{% url 'vote' comment.id%}"><img style="width:20px;height:20px" src="{% static 'Image/dislikes.png' %}"> <small>Dislike</small></a>
+									<a style="padding-left:10px;" class="btn-mr-3" href="{% url 'qcomment' comment.id%}"><img style="width:20px;height:20px"src="{% static 'Image/comment.png' %}">  <small>Comment</small></a>
+								</form>
+								{% else %}
+									<form method="post">
+										{% csrf_token %}
+										<a class="btn-mr-3" href="{% url 'vote' comment.id%}"><img style="width:20px;height:20px" src="{% static 'Image/likes.png' %}">  <small>Like</small></a>
+										<a style="padding-left:10px;" class="btn-mr-3" href="{% url 'qcomment' comment.id%}"><img style="width:20px;height:20px"src="{% static 'Image/comment.png' %}">  <small>Comment</small></a>
+
+									</form>
+								{% endif %}	
+							</div>
+
+							{% for qcomment in comment.Qcomments.all %}
+								{% if qcomment.r_token == False %}
+									<article class="media content-section" style = "border-radius: 25px; background-color: white; padding: 18px;">
+										<img  style="width:50px;height:50px" class="rounded-circle article-img" src="{{ qcomment.author.profile.image.url }}">
+										<div class="media-body">
+											<div class="article">
+												<a class="mr-2" href="#">{{ qcomment.author }}</a>
+												<small>Likes :{{ qcomment.liked_by.count }}</small>
+												<p class="article-title"> {{ qcomment.qcomment }}</p>
+												{% if qcomment.author == user %}
+													<a style= "position: absolute;left: 610px;"class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'qcomment-delete' qcomment.pk %}"><img style="width:20px;height:20px;" src="{% static 'Image/trash.png' %}"/></a>
+													<a style= "position: absolute;left: 660px;"class="btn btn-outline-warning btn-sm mt-1 mb-1" href="{% url 'qcomment-update' qcomment.pk %}"><img style="width:20px;height:20px;" src="{% static 'Image/edit.png' %}"/></a>
+												{% endif %}
+									
+												{% if user in qcomment.liked_by.all %}
+													<form method="post">
+														{% csrf_token %}
+														<a class="btn-mr-3" href="{% url 'qvote' qcomment.id%}"><img  style="width:20px;height:20px" src="{% static 'Image/dislikes.png' %}"> <small>Dislike</small></a>
+													</form>
+												{% else %}
+													<form method="post">
+														{% csrf_token %}
+														<a class="btn-mr-3" href="{% url 'qvote' qcomment.id%}"><img style="width:20px;height:20px" src="{% static 'Image/likes.png' %}">  <small>Like</small></a>
+													</form>
+												{% endif %}
+												
+											</div>
+										</div>
+										{% if comment.author == user and qcomment.r_token == False  %}
+											<a style = "border-radius: 25px;background-color: #d6eef8;padding:5px;padding-left:20px;padding-right:20px;" href="{% url 'solution' qcomment.id %}"><img style="width:23px;height:23px;"src="{% static 'Image/solution.png' %}">Mark as solution !</a>
+										{% endif %}
+									</article>
+								{% elif qcomment.r_token == True %}
+									<article class="media content-section" style = "border-radius: 25px; background-color: white; padding: 10px;">
+										<img  style="width:50px;height:50px" class="rounded-circle article-img" src="{{ qcomment.author.profile.image.url }}">
+										<div class="media-body">
+											<div class="article">
+												<a class="mr-2" href="#">{{ qcomment.author }}</a>
+												<small>Likes :{{ qcomment.liked_by.count }}</small>
+												<p class="article-title"> {{ qcomment.qcomment }}</p>	
+									
+												{% if user in qcomment.liked_by.all %}
+												<form method="post">
+													{% csrf_token %}
+													<a class="btn-mr-3" href="{% url 'qvote' qcomment.id%}"><img style="width:20px;height:20px" src="{% static 'Image/dislikes.png' %}"> <small>Dislike</small></a>
+												</form>
+												{% else %}
+													<form method="post">
+														{% csrf_token %}
+														<a class="btn-mr-3" href="{% url 'qvote' qcomment.id%}"><img style="width:20px;height:20px" src="{% static 'Image/likes.png' %}">  <small>Like</small></a>
+													</form>
+												{% endif %}	
+											</div>
+										</div>
+										{% if comment.author == user and qcomment.r_token == True  %}
+											<a style = "border-radius: 25px;background-color: #d6eef8;padding:5px;padding-left:20px;padding-right:20px;" href="{% url 'solution' qcomment.id %}"><img style="width:23px;height:23px;"src="{% static 'Image/solution.png' %}">Undo as solution </a>
+										{% else %}
+											<a style = "border-radius: 25px;background-color: #d6eef8;padding:5px;padding-left:20px;padding-right:20px;"><img style="width:23px;height:23px;"src="{% static 'Image/solution.png' %}">This comment is the solution </a>
+										{% endif %}
+									</article>
+								{% endif %}
+						{% endfor %}
+						</div>
+						
+					</article>
+					{% endif %}
+			{% empty %}
+				<p>There is no comment</p>
+			{% endfor %}
+			<br>
+		<a style = "float:right;border-radius: 25px;background-color: white;padding:5px;padding-left:20px;padding-right:20px;" href="{% url 'tutorial' %}"><img style="width:20px;height:20px" src="{% static 'Image/back.png' %}"> Back to Home</a>
+
+	  </div>
+	</article>
+
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends "tutorial/base.html" %}
+{% load static %}
+{% block content %}
+        <h2>Teacher</h2>
+        {% for user in users %}
+            {% if user.is_staff and not user.is_superuser %}
+                <article class="media content-section" style = "border-radius: 25px; background-color: #d6eef8;">
+                    <img class="rounded-circle article-img" src="{{ user.profile.image.url }}">
+                    <div class="media-body" >
+                        <h2 class="account-heading">{{ user.username }}</h2>
+                        <p class="text-secondary">{{ user.email}}</p>
+                    </div>
+                </article>
+            {% endif %}
+        {% endfor %}
+        <hr>
+        <h2>Student</h2>
+        {% for user in users %}
+            {% if not user.is_staff %}
+                <article class="media content-section" style = "border-radius: 25px; background-color: #d6eef8;">
+                    <img class="rounded-circle article-img" src="{{ user.profile.image.url }}">
+                    <div class="media-body" >
+                        <h2 class="account-heading">{{ user.username }}</h2>
+                        <p class="text-secondary">{{ user.email}}</p>
+                    </div>
+                </article>
+            {% endif %}
+            {% empty %}
+        {% endfor %}
+    
+{% endblock content %}

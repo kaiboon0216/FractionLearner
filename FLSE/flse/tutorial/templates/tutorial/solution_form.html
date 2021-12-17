@@ -1,0 +1,22 @@
+{% extends "tutorial/base.html" %}
+{% load crispy_forms_tags %}
+{% block content%}
+	<div class="content-section">
+		
+		<form method ="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Question </legend>
+				{% if comment.r_token == False %}
+					<h2>Are you sure you want to make this comment as your solution?</h2>
+				{% else %}
+					<h2>Are you sure you want to undo this comment as your solution?</h2>
+				{% endif %}
+			</fieldset>
+			<div class="form-group">
+				<button class="btn btn-outline-info" type="submit">Yes,I'm Sure</button>
+			</div>
+
+		</form>
+	</div>
+{% endblock content %}

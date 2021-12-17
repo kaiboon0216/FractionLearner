@@ -1,0 +1,17 @@
+{% extends "tutorial/base.html" %}
+{% load static %}
+{% block content %}           
+<div class="content-section" style ="border-radius: 25px; background-color: #d6eef8;padding:20px;padding-bottom:500px">
+        <div class="media" style ="border-radius: 25px; background-color: white; padding:20px;">
+          <img class="rounded-circle account-img" style="width:200px;height:200px" src="{{ user.profile.image.url }}">
+          <div class="media-body" >
+            <h2 class="account-heading">{{ user.username }}</h2>
+            <p class="text-secondary">{{ user.email}}</p>
+          </div>
+          <a class="btn btn-outline-warning btn-sm mt-1 mb-1" href="{% url 'profile-update'%}"><img style="width:25px;height:25px;" src="{% static 'Image/edit.png' %}"/></a>
+        </div>
+          <a style="position:absolute;top:210px;left:590px;"class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'password_reset'%}">Reset Password</a>
+      </div>
+
+
+{% endblock content %}

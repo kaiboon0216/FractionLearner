@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">    
+    <link rel="stylesheet" type="text/css" href="{% static 'tutorial/main.css' %}">
+
+    <style> 
+        .sidenav {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            background-color: #111;
+            padding-top: 75px;
+        }
+
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+    </style>
+
+</head>
+<body>
+    <header class="site-header">
+    <nav style="background-color: #111;" class="navbar navbar-expand-md navbar-dark  fixed-top">
+        <div class="container">
+        <a class="navbar-brand mr-4" href="{% url 'tutorial' %}">Fraction <b style="font-size:19px">Learner</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+            {% if error %}
+
+						{% endif %}
+						<form class="form-inline" action="/search/" method="get">
+								<input style="width:400px ;border-radius: 20px;"class="form-control mr-sm-2" type="text" name="search">
+								<button class="btn btn-default" type="submit">
+										<span style="color : white" class="glyphicon glyphicon-search">Search <img style="width:15px;height:15px;filter: invert(100%);" src="{% static 'Image/search.png' %}"/></span> 
+								</button>
+						</form>
+            </div>
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+            {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'profile' %}"><img class="rounded-circle article-img" style="width:30px;height:30px"src="{{ user.profile.image.url }}">Logged In</a>
+                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                <a class="nav-item nav-link" href="{% url 'register' %}"> Register </a>
+            {% endif %}
+            </div>
+        </div>
+        </div>
+    </nav>
+
+    
+    </header>
+    
+
+    
+    
+
+
+    <main role="main" class="container">
+	  <div class="row">
+	    <div class="col-md-8">
+	      {% if messages %}
+	      	{% for message in messages %}
+	      		<div class='alert alert-{{ message.tags }}'>
+	      			{{ message }}
+	      		</div>
+	      	{% endfor %}
+	      {% endif %}
+	      {% block content %}{% endblock %}
+	      
+	    </div>
+
+        {% if user.is_authenticated %}
+        <div class="sidenav ">
+            <a class="nav-item nav-link"  href="{% url 'profile' %}"><img class="rounded-circle article-img" style="width:30px;height:30px"src="{{ user.profile.image.url }}">Profile</a>
+            <hr style = "border: 1px solid white;"></hr>
+            {% if user.is_staff %}
+                <a href="{% url 'new-tutorial' %}"><img style="width:20px;height:20px; " src="{% static 'Image/plus.png' %}"/> New Tutorial </a>
+                <a href="{% url 'add-question' %}"><img style="width:20px;height:20px; " src="{% static 'Image/plus.png' %}"/> Add Quiz Question </a>
+                <a href="/admin/quiz/quiz/add/"><img style="width:20px;height:20px; " src="{% static 'Image/plus.png' %}"/> Add Quiz </a>
+                <a style="padding-top : 70px" href="{% url 'quiz_marking' %}"><img style="width:20px;height:20px;filter: invert(100%); " src="{% static 'Image/check.png' %}"/> Student Progress </a>
+                <a href="/admin/tutorial/filesadmin/"> <img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/notes.png' %}"/> Manage Notes </a>
+                <a href="/admin/"> <img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/database.png' %}"/> Manage Database </a>
+
+                <a href="{% url 'user_list'%}" style="padding-top : 70px"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/student.png' %}"/> Student's List </a>
+                <a href="{% url 'tutorial' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/tutorial.png' %}"/> Tutorial's List </a>
+                <a href="{% url 'calendar' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/schedule.png' %}"/> Schedule </a>
+                <a href="{% url 'quiz_index' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/quiz.png' %}"/> Quiz </a>
+            {% else %}
+                <a href="{% url 'user_list'%}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/student.png' %}"/> Student's List </a>
+                <a href="{% url 'tutorial' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/tutorial.png' %}"/> Tutorial's List </a>
+                <a href="{% url 'calendar' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/schedule.png' %}"/> Schedule </a>
+                <a href="{% url 'quiz_index' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/quiz.png' %}"/> Quiz </a>
+                <a href="{% url 'quiz_progress' %}"><img style="width:20px;height:20px;filter: invert(100%);" src="{% static 'Image/progress.png' %}"/> My Progress </a>
+
+
+            {% endif %}
+            
+        </div>
+        {% else %}
+
+        {% endif %}
+	</main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

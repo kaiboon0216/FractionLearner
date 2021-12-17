@@ -1,0 +1,11 @@
+{% extends "tutorial/base.html" %}
+{% block content%}
+	<div class="content-section" style = "border-radius: 25px; background-color: #111;">
+	    <h3 align="left" style="color : white">Add Quiz Question</h3>
+		<ul class="list-group dark" style="text-align:center;border-radius: 25px">
+            <a class="list-group-item list-group-item" style="padding: 10px;border-radius: 15px;margin: 5px;" href="/admin/multichoice/mcquestion/add/"> Add MCQ Question</a>
+            <a class="list-group-item list-group-item" style="padding: 10px;border-radius: 15px;margin: 5px;" href="/admin/true_false/tf_question/add/">Add True|False Question</a>
+            <a class="list-group-item list-group-item" style="padding: 10px;border-radius: 15px;margin: 5px;" href="/admin/essay/essay_question/add/">Add Essay Question</a>
+        </ul>
+	</div>
+{% endblock content %}

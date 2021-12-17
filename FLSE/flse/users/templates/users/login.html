@@ -1,0 +1,124 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+		<link rel="stylesheet" type="text/css" href="{% static 'tutorial/login.css' %}"> 
+
+		<link rel="shortcut icon" type="image/png" href="static/Image/favicon.png/">
+		
+		{% if title %}
+			<title>Fraction Learner - {{ title }}</title>
+		{% else %}
+			<title>Fraction Learner</title>
+		{% endif %}
+
+		<style>
+			body {
+				background: #fafafa;
+				color: #333333;
+				background-image: url(https://deskart.ru/wp-content/uploads/2018/08/zakar.jpg);
+				background-repeat: no-repeat;
+				background-size: 100%,auto;
+			}
+		</style>
+</head>
+<body>
+  <!--Header-->
+	<header class="site-header">
+			
+	<!--EndHeader-->
+	
+	<!--Content-->
+		<!--Nav Bar-->
+	  <nav style="background-color: #111;" class="navbar navbar-expand-md navbar-dark  fixed-top">
+	    <div class="container">
+				 <a class="navbar-brand mr-4" href="{% url 'tutorial-home' %}">Fraction <b style="font-size:19px">Learner</b></a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	      </button>
+	      <div class="navbar-nav mr-auto">
+            {% if error %}
+						{% endif %}
+						<form class="form-inline" action="/search/" method="get">
+								<input style="width:400px ;border-radius: 20px;"class="form-control mr-sm-2" type="text" name="search">
+								<button class="btn btn-default" type="submit">
+										<span style="color : white" class="glyphicon glyphicon-search">Search <img style="width:15px;height:15px;filter: invert(100%);" src="{% static 'Image/search.png' %}"/></span> 
+								</button>
+						</form>
+            </div>
+	        <!-- Navbar Right Side -->
+	        <div class="navbar-nav">
+	          {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'profile' %}"><img class="rounded-circle article-img" style="width:30px;height:30px"src="{{ user.profile.image.url }}">Logged In</a>
+                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                <a style ="color:white"class="nav-item nav-link" href="{% url 'register' %}"> Register </a>
+            {% endif %}
+    <!--End Nav Bar-->
+
+    
+    
+    
+	        </div>
+	      </div>
+	    </div>
+	  </nav>
+	</header>
+
+	<main role="main" class="container">
+	  <div class="row">
+	    <div class="col-md-8">
+	      {% if messages %}
+	      	{% for message in messages %}
+	      		<div class='alert alert-{{ message.tags }}'>
+	      			{{ message }}
+	      		</div>
+	      	{% endfor %}
+	      {% endif %}
+        <div class="col-md-9" style = "top:40%;left:35%;border-radius: 25px; background-color: rgba(255,255,255,.7);">
+        <a style="color:black; font-size:40px;">Fraction <b style="font-size:50px">Learner</b></a>
+            <form method="Post">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend style ="color:black" class="border-bottom mb-4">Log In</legend>
+                    {{ form|crispy }}
+                    <small style ="color:black">
+                            Forgotten Password?<a class="ml-2" href="{% url 'password_reset'%}">Click here</a>
+                        </small>
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Log In</button>
+                </div>
+            </form>
+            <div class="border-top pt-3">
+                <small  style ="color:black" >
+                    Need An Account?<a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+                    
+                    <hr>
+
+                </small>
+            </div>
+        </div>
+	      
+	    </div>
+	  </div>
+	</main>
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

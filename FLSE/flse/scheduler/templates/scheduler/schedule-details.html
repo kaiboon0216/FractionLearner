@@ -1,0 +1,16 @@
+{% extends "tutorial/base.html" %}
+
+{% block title %}
+Event Details
+{% endblock %}
+
+{% block content %}
+    <a class="btn btn-primary left" href="{% url 'calendar' %}"> Calendar </a>
+    {% if user.is_staff %}
+        <a class="btn btn-info right mr-2" href="{% url 'schedule_edit' schedule.pk %}"> Edit Schedule </a>  
+    {% endif %}
+    <h3>Event Name: {{ schedule.title }}</h3>
+    <p>From <span style="color: gray;">{{ schedule.start_time }}</span> To <span style="color: gray;">{{ schedule.end_time }}</span></p>
+    <hr>
+    <p>{{ schedule.description }}</p>
+{% endblock %}

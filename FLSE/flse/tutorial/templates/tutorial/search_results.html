@@ -1,0 +1,37 @@
+{% extends "tutorial/base.html" %}
+{% block content%}
+    <p>You searched for: <strong>{{ query }}</strong></p> 
+    {% if tutorials or users%}           
+        <p>Found {{ tutorials|length }} tutorial{{ tutorials|pluralize }} and {{ users|length }} user{{ users|pluralize }}.</p>
+        <ul>
+            <h2>Tutorial </h2>             
+            {% for tutorial in tutorials %}
+                <article class="media content-section" style = "border-radius: 25px; background-color: #d6eef8; left: 90% ">
+                    <img class="rounded-circle article-img" src="{{ tutorial.author.profile.image.url }}">
+                    <div class="media-body">
+                        <div class="article-metadata">
+                        <a class="mr-2" href="#" >By {{ tutorial.author }}</a>
+                        <small class="text-muted">{{ tutorial.date_published|date:"F d, Y" }}</small>
+                        </div>
+                            <h2><a class="article-title" style="display : inline" href="{% url 'tutorial-detail' tutorial.pk %}" >{{ tutorial.title }}</a></h2>
+                    </div>
+                </article>  
+            {% endfor %}  
+            <hr>
+            <h2>User </h2>
+            {% for user in users %}
+                <ul>
+                    <article class="media content-section" style = "border-radius: 25px; background-color: #d6eef8;">
+                        <img class="rounded-circle article-img" src="{{ user.profile.image.url }}">
+                        <div class="media-body" >
+                            <h2 class="account-heading">{{ user.username }}</h2>
+                            <p class="text-secondary">{{ user.email}}</p>
+                        </div>
+                    </article>
+                </ul>
+            {% endfor %}  
+        </ul>       
+    {% else %}           
+        <p>No tutorials or users matched your search criteria.</p>       
+    {% endif %}          
+{% endblock content %}

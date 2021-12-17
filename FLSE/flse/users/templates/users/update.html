@@ -1,0 +1,18 @@
+{% extends "tutorial/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}           
+<form method="Post"  style ="border-radius: 25px; background-color: #d6eef8;padding:20px" enctype="multipart/form-data">
+    <div style ="border-radius: 25px; background-color: white ;padding:50px;">
+        {% csrf_token %}
+        <fieldset class="form-group" >
+            <legend class="border-bottom mb-4" >Profile Info</legend>
+            <img class="rounded-circle account-img" style="width:250px;height:250px;align:center" src="{{ user.profile.image.url }}">
+            {{ u_form|crispy }}
+            {{ p_form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit"> Update</button>
+        </div>
+    </div>
+    </form>
+{% endblock %}
